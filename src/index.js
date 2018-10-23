@@ -1,24 +1,30 @@
 const { getRandomWordSync, getRandomWord } = require('word-maker')
 
 
-const fizzBuzzer = (n) => {
+const fizzBuzzerCb = n => resolve => {
   const modulo3 = !(n % 3)
   const modulo5 = !(n % 5)
 
   if (modulo3 && modulo5) {
-    return "FizzBuzz"
+    resolve("FizzBuzz")
   } else if (modulo3) {
-    return 'Fizz'
+    resolve('Fizz')
   } else if (modulo5) {
-    return 'Buzz'
+    resolve('Buzz')
   } else {
-    return getRandomWordSync()
+    getRandomWord()
+      .then(word => {
+        resolve(word)
+      })
   }
 }
 
-// YOUR CODE HERE
-let i = 1
+const createPromisedLogger = n => (
+  new Promise(fizzBuzzerCb(n))
+)
 
-for (i; i <= 100; ++i) {
-  console.log(`${i}: ${fizzBuzzer(i)}`)
+// YOUR CODE HERE
+for (let i = 1; i <= 100; ++i) {
+  createPromisedLogger(i)
+    .then(word => console.log(`${i}: ${word}`))
 }
