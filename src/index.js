@@ -1,3 +1,4 @@
+const fs = require('fs')
 const { getRandomWordSync, getRandomWord } = require('word-maker')
 
 
@@ -30,8 +31,37 @@ const createPromisedLogger = n => (
   new Promise(fizzBuzzerCb(n))
 )
 
-// YOUR CODE HERE
-for (let i = 1; i <= 100; ++i) {
-  createPromisedLogger(i)
-    .then(word => console.log(`${i}: ${word}`))
+const postIt = data => {
+  // Let's suppose we've added fetch polifill :)
+  let fetch = (url, { body }) => {
+    // Actually we didn't :(
+    // Let's just print body request for test reasons
+    console.log(body)
+  }
+
+  fetch('https://superpuperapi.io', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
 }
+
+// YOUR CODE HERE
+const promisedLoggers = []
+
+for (let i = 1; i <= 100; ++i) {
+  promisedLoggers.push(createPromisedLogger(i))
+}
+
+Promise.all(promisedLoggers)
+  .then(res => {
+    let data = {}
+    res.map((word, i) => data[i + 1] = word)
+
+    postIt(data)
+  })
+
+// HAVE A GOOD DAY!
