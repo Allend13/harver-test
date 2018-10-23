@@ -33,7 +33,7 @@ const createPromisedLogger = n => (
 
 const postIt = data => {
   // Let's suppose we've added fetch polifill :)
-  let fetch = (url, { body }) => {
+  const fetch = (url, { body }) => {
     // Actually we didn't :(
     // Let's just print body request for test reasons
     console.log(body)
@@ -46,6 +46,16 @@ const postIt = data => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
+  })
+
+  // Let's write it to file as well
+  fs.writeFile("./result.json", JSON.stringify(data, null, 4), (err) => {
+    if (!err) {
+      console.log();
+      console.log("================================");
+      console.log("Alrighty, checkout 'result.json'");
+      console.log("================================");
+    }
   })
 }
 
